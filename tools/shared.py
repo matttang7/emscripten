@@ -2170,13 +2170,6 @@ class Building(object):
     return target
 
   @staticmethod
-  def llvm_opts(filename): # deprecated version, only for test runner. TODO: remove
-    if Building.LLVM_OPTS:
-      shutil.move(filename + '.o', filename + '.o.pre')
-      output = run_process([LLVM_OPT, filename + '.o.pre'] + Building.LLVM_OPT_OPTS + ['-o', filename + '.o'], stdout=PIPE).stdout
-      assert os.path.exists(filename + '.o'), 'Failed to run llvm optimizations: ' + output
-
-  @staticmethod
   def llvm_dis(input_filename, output_filename=None):
     # LLVM binary ==> LLVM assembly
     if output_filename is None:
