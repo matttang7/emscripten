@@ -779,18 +779,24 @@ def calculate(temp_files, in_temp, stdout_, stderr_, forced=[]):
 class Ports(object):
   """emscripten-ports library management (https://github.com/emscripten-ports).
   """
+
+  @staticmethod
+  def get_lib_name(name):
+    return shared.static_library_name(name)
+
   @staticmethod
   def build_port(src_path, output_path, includes=[], flags=[], exclude_files=[], exclude_dirs=[]):
     srcs = []
     for root, dirs, files in os.walk(src_path, topdown=False):
       if any((excluded in root) for excluded in exclude_dirs):
         continue
-      for file in files:
-          if (file.endswith('.c') or file.endswith('.cpp')) and not any((excluded in file) for excluded in exclude_files):
-              srcs.append(os.path.join(root, file))
+      for f in files:
+        ext = os.path.splitext(f)[1]
+        if (ext in ('.c', '.cpp')) and not any((excluded in f) for excluded in exclude_files):
+            srcs.append(os.path.join(root, f))
     include_commands = ['-I' + src_path]
     for include in includes:
-        include_commands.append('-I' + include)
+      include_commands.append('-I' + include)
 
     commands = []
     objects = []
@@ -800,11 +806,17 @@ class Ports(object):
       objects.append(obj)
 
     run_commands(commands)
+    print('create_lib', output_path)
     create_lib(output_path, objects)
+    return output_path
 
   @staticmethod
   def run_commands(commands): # make easily available for port objects
     run_commands(commands)
+
+  @staticmethod
+  def create_lib(libname, inputs): # make easily available for port objects
+    create_lib(libname, inputs)
 
   @staticmethod
   def get_dir():

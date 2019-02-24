@@ -1398,6 +1398,13 @@ def print_compiler_stage(cmd):
     print(' "%s" %s' % (cmd[0], ' '.join(cmd[1:])), file=sys.stderr)
 
 
+def static_library_name(name):
+  if Settings.WASM_BACKEND and Settings.WASM_OBJECT_FILES:
+    return name + '.a'
+  else:
+    return name + '.bc'
+
+
 #  Building
 class Building(object):
   COMPILER = CLANG
@@ -1916,8 +1923,6 @@ class Building(object):
       Building.link_lld(linker_inputs, target, ['--relocatable'])
     else:
       Building.link(linker_inputs, target)
-    assert os.path.exists(target)
-    return target
 
   @staticmethod
   def link_llvm(linker_inputs, target):

@@ -41,7 +41,7 @@ def get(ports, settings, shared):
     shared.Building.make(['make', '-C' + dest_path, 'install'])
     return os.path.join(dest_path, 'libharfbuzz.a')
 
-  return [shared.Cache.get('harfbuzz', create, what='port')]
+  return [shared.Cache.get('libharfbuzz.a', create, what='port')]
 
 
 def process_dependencies(settings):

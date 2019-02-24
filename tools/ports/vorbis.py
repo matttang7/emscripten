@@ -25,12 +25,12 @@ def get(ports, settings, shared):
     shutil.rmtree(dest_path, ignore_errors=True)
     shutil.copytree(source_path, dest_path)
 
-    final = os.path.join(dest_path, 'libvorbis.bc')
+    final = os.path.join(dest_path, ports.get_lib_name('libvorbis'))
     ports.build_port(os.path.join(dest_path, 'lib'), final, [os.path.join(dest_path, 'include')],
                      ['-s', 'USE_OGG=1'], ['psytune', 'barkmel', 'tone', 'misc'])
     return final
 
-  return [shared.Cache.get('vorbis', create)]
+  return [shared.Cache.get(ports.get_lib_name('libvorbis'), create)]
 
 
 def process_dependencies(settings):

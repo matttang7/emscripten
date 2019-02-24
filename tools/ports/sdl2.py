@@ -16,6 +16,7 @@ def get(ports, settings, shared):
 
   # get the port
   ports.fetch_project('sdl2', 'https://github.com/emscripten-ports/SDL2/archive/' + TAG + '.zip', SUBDIR)
+  libname = ports.get_lib_name('libSDL2')
 
   def create():
     # we are rebuilding SDL, clear dependant projects so they copy in their includes to ours properly
@@ -39,11 +40,11 @@ def get(ports, settings, shared):
       commands.append([shared.PYTHON, shared.EMCC, os.path.join(ports.get_dir(), 'sdl2', SUBDIR, 'src', src), '-O2', '-o', o, '-I' + dest_include_path, '-O2', '-DUSING_GENERATED_CONFIG_H', '-w'])
       o_s.append(o)
     ports.run_commands(commands)
-    final = os.path.join(ports.get_build_dir(), 'sdl2', 'libsdl2.bc')
-    shared.Building.link_to_object(o_s, final)
+    final = os.path.join(ports.get_build_dir(), 'sdl2', libname)
+    ports.create_lib(final, o_s)
     return final
 
-  return [shared.Cache.get('sdl2', create, what='port')]
+  return [shared.Cache.get(libname, create, what='port')]
 
 
 def process_args(ports, args, settings, shared):
