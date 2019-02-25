@@ -327,7 +327,7 @@ def main():
     elif what == 'sdl2':
       build_port('sdl2', libname('libSDL2'), ['-s', 'USE_SDL=2'])
     elif what == 'sdl2-gfx':
-      build_port('sdl2-gfx', 'libSDL2_gfx.bc', ['-s', 'USE_SDL=2', '-s', 'USE_SDL_IMAGE=2', '-s', 'USE_SDL_GFX=2'])
+      build_port('sdl2-gfx', libname('libSDL2_gfx'), ['-s', 'USE_SDL=2', '-s', 'USE_SDL_IMAGE=2', '-s', 'USE_SDL_GFX=2'])
     elif what == 'sdl2-image':
       build_port('sdl2-image', libname('libSDL2_image'), ['-s', 'USE_SDL=2', '-s', 'USE_SDL_IMAGE=2'])
     elif what == 'sdl2-image-png':
